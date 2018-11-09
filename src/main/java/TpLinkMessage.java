@@ -21,20 +21,26 @@ public class TpLinkMessage {
 
     private String ipAddress;
 
-    public TpLinkMessage(String ipAddress){
+    public TpLinkMessage(final String ipAddress){
         mapSetup();
-
         if(!validIp(ipAddress)){
             throw new Error("Not a valid IP address");
         }
-
         this.ipAddress = ipAddress;
-
     }
 
-    public String getCommand(String commandOption){
+    public TpLinkMessage(){
+        mapSetup();
+    }
+
+    public String getCommand(final String commandOption){
+
+        if(ipAddress == null){
+            throw new Error("IP address was not set");
+        }
 
         String option = commandOptions.get(commandOption);
+
         if(option == null){
             throw new Error("Option was not valid");
         }
@@ -56,9 +62,7 @@ public class TpLinkMessage {
     }
 
     private static String replaceZero(String output){
-
         return "{" + output.substring(1);
-
     }
 
     private static String getSystemInfo(String ipAddress, byte[] command){
@@ -134,7 +138,7 @@ public class TpLinkMessage {
         return ipAddress;
     }
 
-    public void setIpAddress(String ipAddress) {
+    public void setIpAddress(final String ipAddress) {
 
         if(!validIp(ipAddress)){
             throw new Error("Not a valid IP address");
