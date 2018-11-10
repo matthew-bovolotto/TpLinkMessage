@@ -1,3 +1,5 @@
+package commands;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,7 +15,7 @@ import java.util.TreeMap;
 
 public class TpLinkMessage {
 
-    private static final Map<String,String> commandOptions = new TreeMap<String,String>();
+    private GetCommands commands;
 
     private static final String IPV4_PATTERN = "^(([0-1]?[0-9]{1,2}\\.)|(2[0-4][0-9]\\.)|(25[0-5]\\.)){3}(([0-1]?[0-9]{1,2})|(2[0-4][0-9])|(25[0-5]))";
     private static final byte KEY = (byte) 171;
@@ -22,7 +24,8 @@ public class TpLinkMessage {
     private String ipAddress;
 
     public TpLinkMessage(final String ipAddress){
-        mapSetup();
+        this.commands = new GetCommands();
+
         if(!validIp(ipAddress)){
             throw new Error("Not a valid IP address");
         }
@@ -30,30 +33,25 @@ public class TpLinkMessage {
     }
 
     public TpLinkMessage(){
-        mapSetup();
+        this.commands = new GetCommands();
     }
 
-    public String getCommand(final String commandOption){
+    public String getCommand(final String commandOption) throws IOException {
 
         if(ipAddress == null){
             throw new Error("IP address was not set");
         }
 
-        String option = commandOptions.get(commandOption);
+        String option = commands.getPropertyValues(commandOption);
 
         if(option == null){
             throw new Error("Option was not valid");
         }
 
-        return replaceZero(getSystemInfo(ipAddress, encrypt(commandOptions.get(commandOption))));
+        return replaceZero(getSystemInfo(ipAddress, encrypt(option)));
     }
 
-    private static void mapSetup(){
-        commandOptions.put("info","{\"system\":{\"get_sysinfo\":{}}}");
-        commandOptions.put("time","{\"time\":{\"get_time\":{}}}");
-    }
-
-    private static boolean validIp(String ipAddress) {
+    private boolean validIp(String ipAddress) {
 
         if (ipAddress.matches(IPV4_PATTERN)){
             return true;
