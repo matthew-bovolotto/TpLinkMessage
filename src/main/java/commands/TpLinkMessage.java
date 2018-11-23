@@ -10,9 +10,6 @@ import java.net.UnknownHostException;
 
 import java.nio.charset.Charset;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 public class TpLinkMessage {
 
     private GetCommands commands;
@@ -25,11 +22,7 @@ public class TpLinkMessage {
 
     public TpLinkMessage(final String ipAddress){
         this.commands = new GetCommands();
-
-        if(!validIp(ipAddress)){
-            throw new Error("Not a valid IP address");
-        }
-        this.ipAddress = ipAddress;
+        this.setIpAddress(ipAddress);
     }
 
     public TpLinkMessage(){
@@ -139,7 +132,7 @@ public class TpLinkMessage {
     public void setIpAddress(final String ipAddress) {
 
         if(!validIp(ipAddress)){
-            throw new Error("Not a valid IP address");
+            throw new Error("not a valid IP address");
         }
 
         this.ipAddress = ipAddress;
