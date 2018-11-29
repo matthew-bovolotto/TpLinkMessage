@@ -1,6 +1,6 @@
 package main;
 
-import argparse.ArgParseTpLink;
+import argparse.ArgParsePrintReturnMessage;
 import commands.GetCommands;
 import commands.TpLinkMessage;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class main {
+public class PrintReturnMessage {
 
     public static void main(String[] argv) throws Exception {
 
@@ -22,7 +22,7 @@ public class main {
 
         try {
 
-            Namespace res = ArgParseTpLink.argParseProvider(argv);
+            Namespace res = ArgParsePrintReturnMessage.argParseProvider(argv);
 
             //String[] IP_ADDRESSES = {"192.168.1.80","192.168.1.81","192.168.1.82","192.168.1.83","192.168.1.85","192.168.1.86"};
 

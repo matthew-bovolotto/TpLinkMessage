@@ -11,7 +11,36 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = "main.main"
+startScripts {
+    enabled = false
+}
+run.enabled = false
+
+task createPrintReturnMessage(type: CreateStartScripts){
+    mainClassName = 'main.PrintReturnMessage'
+    outputDir = startScripts.outputDir
+    classpath = startScripts.classpath
+    applicationName = 'printReturnMessage'
+}
+
+task createLightSwitchServer(type: CreateStartScripts){
+    mainClassName = 'main.LightSwitchServer'
+    outputDir = startScripts.outputDir
+    classpath = startScripts.classpath
+    applicationName = 'lightSwitchServer'
+}
+
+tasks.withType(CreateStartScripts){
+    doLast{
+        it.windowsScript.delete()
+    }
+}
+
+applicationDistribution.into("bin"){
+    from(createPrintReturnMessage)
+    from(createLightSwitchServer)
+    fileMode = 0755
+}
 
 dependencies {
     compile group: 'net.sourceforge.argparse4j', name: 'argparse4j', version: '0.8.1'
