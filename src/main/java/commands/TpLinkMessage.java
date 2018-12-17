@@ -29,15 +29,15 @@ public class TpLinkMessage {
         this.commands = new GetCommands();
     }
 
-    public String getCommand(final String commandOption) throws IOException {
+    public String getCommand(final String commandOption) throws Exception {
 
-        if(ipAddress == null){
+        if (ipAddress == null) {
             throw new Error("IP address was not set");
         }
 
         String option = commands.getPropertyValues(commandOption);
 
-        if(option == null){
+        if (option == null) {
             throw new Error("Option was not valid");
         }
 
@@ -56,10 +56,11 @@ public class TpLinkMessage {
         return "{" + output.substring(1);
     }
 
-    private static String getSystemInfo(String ipAddress, byte[] command){
+    private static String getSystemInfo(String ipAddress, byte[] command) throws Exception {
 
         try{
             Socket connectionSocket = new Socket(ipAddress, PORT);
+            connectionSocket.setSoTimeout(1000);
 
             InputStream is = connectionSocket.getInputStream();
 
@@ -71,20 +72,20 @@ public class TpLinkMessage {
 
             is.read(result);
 
-            //System.out.println("received: " + Hex.encodeHexString(decrypt(result).toByteArray()));
-            //System.out.println(decrypt(result));
-
             connectionSocket.close();
 
             return new String(decrypt(result).toByteArray());
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
+            throw new UnknownHostException("Could not reach host");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new IOException("Could not create socket");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Could not get system info");
         }
-
-        return null;
     }
 
     private static byte[] encrypt(String data){

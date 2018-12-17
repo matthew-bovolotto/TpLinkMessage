@@ -86,6 +86,11 @@ System.out.println(switchMessager.getCommand("info"));
 
 **lightSwitchServer:**
 
+##To Do:
+
+- Writeup test cases
+- Complete documentation of tools
+
 ## Acknowledgment
 
 The reverse engineering of the TP Link protocol and commands was done by the following project:

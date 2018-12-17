@@ -17,6 +17,7 @@ public class LightSwitchServer {
 
             String SWITCH_ADDRESS = res.getString("SWITCH_ADDRESS");
             List<String> LIGHT_ADDRESSES = (List<String>) res.get("LIGHT_ADDRESSES");
+            int ATTEMPTS = res.get("ATTEMPTS");
 
             try {
 
@@ -26,9 +27,41 @@ public class LightSwitchServer {
 
                 Boolean switchState = false;
                 Boolean prevSwitchState = false;
+                int switchPolls = 0;
 
                 while (true) {
-                    String switchInfo = switchMessager.getCommand("info");
+
+                    String switchInfo = null;
+                    int hostAttempts = 0;
+
+
+                    do {
+                        try {
+                            switchInfo = switchMessager.getCommand("info");
+
+                            if(hostAttempts > 0){
+                                System.out.println("------------------------------------------------------------------------");
+                                System.out.println("Connection reattempt successful - polling light switch");
+                                System.out.println("------------------------------------------------------------------------");
+                            }
+                            switchPolls++;
+                            System.out.print("\r(" + switchPolls + ") - Switch : " + SWITCH_ADDRESS);
+                            hostAttempts = 0;
+
+                        } catch (Exception e) {
+
+                            hostAttempts++;
+                            System.out.println("------------------------------------------------------------------------");
+                            System.out.println("Could not connect to host - reattempting connection in 5 seconds (" + hostAttempts + ")");
+                            System.out.println("------------------------------------------------------------------------");
+                            Thread.sleep(5000);
+                            if(hostAttempts >= ATTEMPTS){
+                                System.out.println(e.getMessage());
+                                System.exit(1);
+                            }
+                        }
+
+                    } while(hostAttempts != 0);
 
                     switchState = checkState(switchInfo);
 

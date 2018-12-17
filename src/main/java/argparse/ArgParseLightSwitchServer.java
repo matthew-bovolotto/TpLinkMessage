@@ -26,7 +26,12 @@ public class ArgParseLightSwitchServer {
                 .nargs("+")
                 .required(true)
                 .help("Specify address for lights controlled by the switch");
-
+        parser.addArgument("--attempts")
+                .dest("ATTEMPTS")
+                .type(int.class)
+                .help("Specify number of retry attempts")
+                .setDefault(5)
+                .required(false);
 
         Namespace res = parser.parseArgs(args);
         return res;
