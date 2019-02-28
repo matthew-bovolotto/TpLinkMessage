@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ArgParseLightSwitchServer {
 
-    public static Namespace argParseProvider(String args[]) throws IOException, ArgumentParserException {
+    public static Namespace argParseProvider(String[] args) throws IOException, ArgumentParserException {
 
         ArgumentParser parser = ArgumentParsers.newFor("prog").build()
                 .description("TP LINK ARG PARSE");
