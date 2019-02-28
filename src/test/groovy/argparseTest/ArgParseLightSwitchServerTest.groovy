@@ -9,7 +9,7 @@ class ArgParseLightSwitchServerTest extends Specification {
 
     Namespace namespace;
 
-    def "no arguments"(){
+    def "[ArgParseLightSwitchServerTest]: no arguments"(){
         given:
             String[] args = ""
         when:
@@ -19,7 +19,7 @@ class ArgParseLightSwitchServerTest extends Specification {
             println(e.getMessage())
     }
 
-    def "empty arguments"(String[] args){
+    def "[ArgParseLightSwitchServerTest]: empty arguments"(String[] args){
         when:
             namespace = ArgParseLightSwitchServer.argParseProvider(args)
 
@@ -33,7 +33,7 @@ class ArgParseLightSwitchServerTest extends Specification {
                     ["--switch", "127.0.0.1", "--lights", "127.0.0.1", "--attempts"]]
     }
 
-    def "valid arguments"(String[] args, List<String> lightVal, int attemptVal){
+    def "[ArgParseLightSwitchServerTest]: valid arguments"(String[] args, List<String> lightVal, int attemptVal){
         when:
             namespace = ArgParseLightSwitchServer.argParseProvider(args)
 
@@ -56,7 +56,7 @@ class ArgParseLightSwitchServerTest extends Specification {
             attemptVal << [5,5,10,10]
     }
 
-    def "help menu"(String[] args){
+    def "[ArgParseLightSwitchServerTest]: help menu"(String[] args){
         when:
             namespace = ArgParseLightSwitchServer.argParseProvider(args)
         then:
