@@ -10,10 +10,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration
+import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+
 public class GetCommands {
 
-    String result = "";
     InputStream inputStream;
+
+    private static PropertiesConfiguration configuration;
+
+    static {
+        try {
+            configuration = new PropertiesConfiguration("commandOptions.properties");
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+        configuration.setReloadingStrategy(new FileChangedReloadingStrategy());
+    }
 
     public String getPropertyValues(String property) throws IOException{
 

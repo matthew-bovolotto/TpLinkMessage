@@ -22,7 +22,7 @@ public class PrintReturnMessage {
 
         try {
 
-            Namespace res = ArgParsePrintReturnMessage.argParseProvider(argv);
+            Namespace res = new ArgParsePrintReturnMessage(argv).getNamespace();
 
             //String[] IP_ADDRESSES = {"192.168.1.80","192.168.1.81","192.168.1.82","192.168.1.83","192.168.1.85","192.168.1.86"};
 

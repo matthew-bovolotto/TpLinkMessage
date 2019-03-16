@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 public class ArgParsePrintReturnMessage {
 
-    public static Namespace argParseProvider(String args[]) throws IOException, ArgumentParserException {
+    Namespace namespace;
+
+    public ArgParsePrintReturnMessage(String args[]) throws IOException, ArgumentParserException {
 
         GetCommands command = new GetCommands();
         ArrayList<String> arrayList = command.getPropertyList();
@@ -29,8 +31,10 @@ public class ArgParsePrintReturnMessage {
                 .help("command to submit to tp link control module")
                 .required(true);
 
-        Namespace res = parser.parseArgs(args);
-        return res;
+        namespace = parser.parseArgs(args);
+    }
 
+    public Namespace getNamespace(){
+        return namespace;
     }
 }

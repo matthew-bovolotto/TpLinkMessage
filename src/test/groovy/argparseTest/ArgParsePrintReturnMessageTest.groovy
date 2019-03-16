@@ -1,22 +1,33 @@
 package argparseTest
 
 import commands.GetCommands
+import argparse.ArgParsePrintReturnMessage
+
 import net.sourceforge.argparse4j.inf.ArgumentParserException
+import net.sourceforge.argparse4j.inf.Namespace
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.context.annotation.Configuration
+import org.springframework.test.annotation.DirtiesContext;
 import spock.lang.Shared
 import spock.lang.Specification;
-import net.sourceforge.argparse4j.inf.Namespace;
-import argparse.ArgParsePrintReturnMessage;
 
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption
+import java.nio.file.Path
+import java.nio.file.Paths;
+
+@EnableAutoConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class ArgParsePrintReturnMessageTest extends Specification{
 
-    Namespace namespace;
-    @Shared List<String> commandList = new GetCommands().getPropertyList();
+    @Shared
+    List<String> commandList = new GetCommands().getPropertyList();
 
     def "[ArgParsePrintReturnMessageTest]: no arguments"(){
         given:
             String[] args = ""
         when:
-            namespace = ArgParsePrintReturnMessage.argParseProvider(args)
+            Namespace namespace = new ArgParsePrintReturnMessage(args).getNamespace()
         then:
             def e = thrown(ArgumentParserException)
             println(e.getMessage())
@@ -24,7 +35,7 @@ class ArgParsePrintReturnMessageTest extends Specification{
 
     def "[ArgParsePrintReturnMessageTest]: empty arguments"(String[] args){
         when:
-            namespace = ArgParsePrintReturnMessage.argParseProvider(args)
+            Namespace namespace = new ArgParsePrintReturnMessage(args).getNamespace()
 
         then:
             def e = thrown(ArgumentParserException)
@@ -46,13 +57,23 @@ class ArgParsePrintReturnMessageTest extends Specification{
     }
 
     def "[ArgParsePrintReturnMessageTest]: valid arguments"(String command){
+        given:
+            Files.copy(Paths.get("src/test/resources/minCommandOptions.properties"),Paths.get("src/test/resources/commandOptions.properties"),StandardCopyOption.REPLACE_EXISTING)
+
         when:
-            String[] args = ["--ipAddress","127.0.0.1","--command",command]
-            namespace = ArgParsePrintReturnMessage.argParseProvider(args)
+            println("commandOptions:" + new File("src/test/resources/commandOptions.properties").text)
+            String[] args = ["--ipAddress","127.0.0.1","--command",command, "--help"]
+            println(args)
+            Namespace namespace = new ArgParsePrintReturnMessage(args).getNamespace()
 
         then:
-            namespace.getString("ipAddress") == "127.0.0.1"
-            namespace.getString("command") == command
+            def e = thrown(Exception)
+            println(e.getMessage())
+            //namespace.getString("ipAddress") == "127.0.0.1"
+            //namespace.getString("command") == command
+
+        cleanup:
+            Files.copy(Paths.get("src/test/resources/testCommandOptions.properties"),Paths.get("src/test/resources/commandOptions.properties"),StandardCopyOption.REPLACE_EXISTING)
 
         where:
             command << commandList
@@ -60,7 +81,7 @@ class ArgParsePrintReturnMessageTest extends Specification{
 
     def "[ArgParsePrintReturnMessageTest]: help menu"(String[] args){
         when:
-            namespace = ArgParsePrintReturnMessage.argParseProvider(args)
+            Namespace namespace = new ArgParsePrintReturnMessage(args).getNamespace()
         then:
             def e = thrown(ArgumentParserException)
             println(e.getMessage())
