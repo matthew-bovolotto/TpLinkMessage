@@ -20,6 +20,8 @@ public class PrintReturnMessage {
 
         TpLinkMessage messager = new TpLinkMessage();
 
+		System.out.println("hello world");
+
         try {
 
             Namespace res = new ArgParsePrintReturnMessage(argv).getNamespace();
@@ -76,3 +78,4 @@ public class PrintReturnMessage {
         }
     }
 }
+

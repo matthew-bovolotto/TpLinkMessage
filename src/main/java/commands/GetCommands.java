@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 
 public class GetCommands {
@@ -29,9 +29,9 @@ public class GetCommands {
         configuration.setReloadingStrategy(new FileChangedReloadingStrategy());
     }
 
-    public String getPropertyValues(String property) throws IOException{
+    public synchronized String getPropertyValues(String property) throws IOException{
 
-        Properties properties = new Properties();
+        /*Properties properties = new Properties();
 
         inputStream = getClass().getClassLoader().getResourceAsStream("commandOptions.properties");
 
@@ -41,7 +41,8 @@ public class GetCommands {
             throw new FileNotFoundException("property file 'commandOptions.properties' not found in the classpath");
         }
 
-        return properties.getProperty(property);
+        return properties.getProperty(property);*/
+        return (String) configuration.getProperty(property);
     }
 
     public ArrayList<String> getPropertyList() throws IOException{

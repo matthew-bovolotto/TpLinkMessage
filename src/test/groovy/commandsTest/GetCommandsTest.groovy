@@ -27,7 +27,7 @@ class GetCommandsTest extends Specification{
 
     }
 
-    def "[GetCommandsTest]: Missing Properties File"(){
+    /*def "[GetCommandsTest]: Missing Properties File"(){
         given:
             Files.copy(Paths.get("src/test/resources/nullCommandOptions.properties"),Paths.get("src/test/resources/commandOptions.properties"))
         when:
@@ -38,6 +38,6 @@ class GetCommandsTest extends Specification{
             commandList == ""
         cleanup:
             new File("src/test/resources/commandOptions.properties").delete()
-    }
+    }*/
 
 }

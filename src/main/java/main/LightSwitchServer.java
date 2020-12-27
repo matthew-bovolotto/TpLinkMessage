@@ -34,7 +34,6 @@ public class LightSwitchServer {
                     String switchInfo = null;
                     int hostAttempts = 0;
 
-
                     do {
                         try {
                             switchInfo = switchMessager.getCommand("info");
@@ -48,13 +47,20 @@ public class LightSwitchServer {
                             System.out.print("\r(" + switchPolls + ") - Switch : " + SWITCH_ADDRESS);
                             hostAttempts = 0;
 
+							switchState = checkState(switchInfo);
+
+							if (prevSwitchState != switchState) {
+								System.out.println("");
+								System.out.println("Change of state!");
+								stateChange(LIGHT_ADDRESSES);
+							}
+
+							prevSwitchState = switchState;
+
                         } catch (Exception e) {
 
                             hostAttempts++;
-                            System.out.println("------------------------------------------------------------------------");
-                            System.out.println("Could not connect to host - reattempting connection in 5 seconds (" + hostAttempts + ")");
-                            System.out.println("------------------------------------------------------------------------");
-                            Thread.sleep(5000);
+                            connectionWait(hostAttempts);
                             if(hostAttempts >= ATTEMPTS){
                                 System.out.println(e.getMessage());
                                 System.exit(1);
@@ -63,14 +69,6 @@ public class LightSwitchServer {
 
                     } while(hostAttempts != 0);
 
-                    switchState = checkState(switchInfo);
-
-                    if (prevSwitchState != switchState) {
-                        System.out.println("Change of state!");
-                        stateChange(LIGHT_ADDRESSES);
-                    }
-
-                    prevSwitchState = switchState;
                 }
 
             } catch (java.lang.Error error) {
@@ -130,5 +128,12 @@ public class LightSwitchServer {
         System.out.println("Light Addresses: " + LIGHT_ADDRESSES);
         System.out.println("------------------------------------------------------------------------");
     }
+
+    private static void connectionWait(int hostAttempts) throws Exception{
+		System.out.println("------------------------------------------------------------------------");
+		System.out.println("Could not connect to host - reattempting connection in 5 seconds (" + hostAttempts + ")");
+		System.out.println("------------------------------------------------------------------------");
+		Thread.sleep(5000);
+ 	}
 
 }
